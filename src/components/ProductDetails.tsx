@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet, useParams, Link } from "react-router-dom";
+import { Outlet, useParams, Link, useLocation } from "react-router-dom";
 import { useProduct } from "../hooks/useProducts";
 import { useBreadcrumbs } from "../context/useBreadcrumbs";
 
@@ -9,6 +9,7 @@ const ProductDetails = () => {
   const { setCrumbs } = useBreadcrumbs();
 
   const { data, error, status } = useProduct(productId ?? 0);
+  const pathname = useLocation();
 
   useEffect(() => {
     if (data) {
@@ -18,7 +19,7 @@ const ProductDetails = () => {
         { label: data.title, path: `/products/${data.id}` },
       ]);
     }
-  }, [setCrumbs, data]);
+  }, [data, setCrumbs, pathname.pathname]);
 
   if (status === "pending" || !data) {
     return <h1 className="text-center text-lg">Loading...</h1>;
